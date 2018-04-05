@@ -1,0 +1,10 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "The best voting application ever!!!";
+}
+<h3>@Model.Option1 vs @Model.Option2!</h3>
+<form id="choice" name='form' method="POST" action="/">
+    <button option="a" type="submit" asp-route-id="@Model.Option1" >@Model.Option1</button>
+    <button option="b" type="submit" asp-route-id="@Model.Option2">@Model.Option1</button>
+</form>

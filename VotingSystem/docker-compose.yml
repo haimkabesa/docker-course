@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  voting.web:
+    image: votingweb
+    build:
+      context: .
+      dockerfile: Voting.Web/Dockerfile
+    environment:
+      - Option1=Tabs
+      - Option1=Spaces
+      - votes-api-address=voting.api
+
+  voting.api:
+    image: votingapi
+    build:
+      context: .
+      dockerfile: Voting.API/Dockerfile
+
+
+  voting.processor:
+    image: votingprocessor
+    build:
+      context: .
+      dockerfile: Voting.Processor/Dockerfile
+
+  voting.webpy:
+    image: votingwebpy
+    build:
+      context: ./Voting.Webpy/
+      dockerfile: Dockerfile
+    environment:
+      REDIS: votingdb
+    ports:
+        - "8080:80"
+
+  voting.db:
+    image: redis
+    container_name: votingdb
+    ports:
+        - "6379:6379"
+
+ 
