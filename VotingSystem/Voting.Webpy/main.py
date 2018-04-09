@@ -8,8 +8,13 @@ import sys
 
 app = Flask(__name__)
 
+local_votes = {}
+local_mode='true'
 # Load configurations from environment or config file
 app.config.from_pyfile('config_file.cfg')
+
+if ("LOCAL" in os.environ):
+    local_mode= os.environ['LOCAL']
 
 if ("VOTE1VALUE" in os.environ and os.environ['VOTE1VALUE']):
     button1 = os.environ['VOTE1VALUE']
@@ -26,40 +31,25 @@ if ("TITLE" in os.environ and os.environ['TITLE']):
 else:
     title = app.config['TITLE']
 
-# Redis configurations
-redis_server = os.environ['REDIS']
-
-# Redis Connection
-try:
-    if "REDIS_PWD" in os.environ:
-        r = redis.StrictRedis(host=redis_server,
-                        port=6379, 
-                        password=os.environ['REDIS_PWD'])
-    else:
-        r = redis.Redis(redis_server)
-    r.ping()
-except redis.ConnectionError:
-    exit('Failed to connect to Redis, terminating.')
 
 # Change title to host name to demo NLB
 if app.config['SHOWHOST'] == "true":
     title = socket.gethostname()
 
-# Init Redis
-if not r.get(button1): r.set(button1,0)
-if not r.get(button2): r.set(button2,0)
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
     if request.method == 'GET':
 
-        opt1 = requests.get('http://voting.api/api/votes/'+button1)
-        opt2 = requests.get('http://voting.api/api/votes/'+button2)
+        opt1 = get_votes(button1) 
+        opt2 = get_votes(button2) 
 
         # Get current values
-        vote1 = opt1.text #r.get(button1).decode('utf-8')
-        vote2 = opt2.text #r.get(button2).decode('utf-8')            
+        vote1 = opt1
+        vote2 = opt2            
 
         # Return index with values
         return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
@@ -67,29 +57,48 @@ def index():
     elif request.method == 'POST':
 
         if request.form['vote'] == 'reset':
-            
-            # Empty table and return results
-            r.set(button1,0)
-            r.set(button2,0)
-            vote1 = r.get(button1).decode('utf-8')
-            vote2 = r.get(button2).decode('utf-8')
+                        
+            reset()
+            vote1 = get_votes(button1) 
+            vote2 = get_votes(button2) 
             return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
         
         else:
 
             # Insert vote result into DB
             vote = request.form['vote']
-            requests.post('http://voting.api/api/votes/'+vote)
-       
-            opt1 = requests.get('http://voting.api/api/votes/'+button1)
-            opt2 = requests.get('http://voting.api/api/votes/'+button2)
+            add_vote(vote)
+            opt1 = get_votes(button1) 
+            opt2 = get_votes(button2) 
         
             # Get current values
-            vote1 = 0#opt1.text #r.get(button1).decode('utf-8')
-            vote2 = 0#opt2.text #r.get(button2).decode('utf-8')          
+            vote1 = opt1
+            vote2 = opt2        
 
             # Return results
             return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
+
+
+def get_votes(option):
+    if option not in local_votes: local_votes[option]=0        
+    if local_mode:     
+        return local_votes[option];
+    else:
+        res=requests.get('http://voting.api/api/votes/'+option)
+        return res.text
+
+def add_vote(option):
+    if option not in local_votes: 
+        local_votes[option]=0
+    if local_mode:     
+        local_votes[option] = local_votes[option]+1
+    else:
+        requests.post('http://voting.api/api/votes/'+option)
+
+def reset():
+    if local_mode:     
+        local_votes[button1] = 0
+        local_votes[button2] = 0
 
 if __name__ == "__main__":
     app.run()

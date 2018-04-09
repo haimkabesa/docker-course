@@ -16,21 +16,30 @@ services:
     build:
       context: .
       dockerfile: Voting.API/Dockerfile
-
+    environment:
+      REDIS: votingdb
+      RABBITMQ: rabbitmq
+      RABBITMQ_USER: user
+      RABBITMQ_PASS: password
 
   voting.processor:
     image: votingprocessor
     build:
       context: .
       dockerfile: Voting.Processor/Dockerfile
+    environment:
+      REDIS: votingdb
+      RABBITMQ: rabbitmq
+      RABBITMQ_USER: user
+      RABBITMQ_PASS: password
 
   voting.webpy:
     image: votingwebpy
     build:
       context: ./Voting.Webpy/
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile    
     environment:
-      REDIS: votingdb
+      LOCAL: ""
     ports:
         - "8080:80"
 
@@ -40,4 +49,12 @@ services:
     ports:
         - "6379:6379"
 
- 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "password"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "15672:15672"
+      - "5672:5672"

@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RabbitMQ.Client;
+using ServiceStack.Redis;
 
 namespace Voting.API
 {
@@ -24,6 +26,24 @@ namespace Voting.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSingleton<RedisManagerPool>(_ => new RedisManagerPool(Configuration["REDIS"]));
+            services.AddSingleton<IConnection>(_ =>
+            {
+                var factory = new ConnectionFactory() { HostName = Configuration["RABBITMQ"] };
+                factory.UserName = Configuration["RABBITMQ_USER"];
+                factory.Password = Configuration["RABBITMQ_PASS"];
+                var connection = factory.CreateConnection();
+                using (var channel = connection.CreateModel())
+                {
+                    channel.QueueDeclare(queue: "votes",
+                        durable: false,
+                        exclusive: false,
+                        autoDelete: false,
+                        arguments: null);
+                }
+
+                return connection;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,4 +57,6 @@ namespace Voting.API
             app.UseMvc();
         }
     }
+
+    
 }
