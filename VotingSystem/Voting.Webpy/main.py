@@ -52,7 +52,7 @@ def index():
         vote2 = opt2            
 
         # Return index with values
-        return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
+        return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title+str(os.getpid()))
 
     elif request.method == 'POST':
 
@@ -76,7 +76,7 @@ def index():
             vote2 = opt2        
 
             # Return results
-            return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title)
+            return render_template("index.html", value1=int(vote1), value2=int(vote2), button1=button1, button2=button2, title=title+str(os.getpid()))
 
 
 def get_votes(option):
@@ -101,4 +101,4 @@ def reset():
         local_votes[button2] = 0
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')

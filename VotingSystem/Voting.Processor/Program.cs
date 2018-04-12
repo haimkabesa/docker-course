@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Threading;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using ServiceStack.Redis;
@@ -15,7 +16,7 @@ namespace Voting.Processor
             factory.UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER");
             factory.Password = Environment.GetEnvironmentVariable("RABBITMQ_PASS");
 
-            using (var connection = factory.CreateConnection())
+            using (var connection = SafeConnect(factory))
             using (var channel = connection.CreateModel())
             {
                 channel.QueueDeclare(queue: "votes",
@@ -42,6 +43,28 @@ namespace Voting.Processor
                 Console.WriteLine(" Press [enter] to exit.");
                 Console.ReadLine();
             }
+        }
+
+        private static IConnection SafeConnect(ConnectionFactory factory)
+        {
+            int attempt = 0;
+            int connAttempts = 5;
+            while (attempt<connAttempts)
+            {
+
+                try
+                {
+                    return factory.CreateConnection();
+                }
+                catch (Exception)
+                {
+                    
+                    Thread.Sleep(1000);
+                }
+
+                attempt++;
+            } 
+            throw new Exception("couldnt connect to RMQ");
         }
     }
 }

@@ -1,0 +1,30 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:  
+  labels:
+    io.kompose.service: voting.processor
+  name: voting.processor
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: voting.processor
+    spec:
+      containers:
+      - env:
+        - name: RABBITMQ
+          value: rabbitmq
+        - name: RABBITMQ_PASS
+          value: password
+        - name: RABBITMQ_USER
+          value: user
+        - name: REDIS
+          value: votingdb
+        image: votingprocessor
+        name: voting.processor
+        resources: {}
+      restartPolicy: Always
+status: {}
