@@ -1,5 +1,5 @@
 FROM    python:3 
-# tiangolo/uwsgi-nginx-flask:python3.6
+LABEL Maintainer="haimk@codevalue.net"
 
 RUN     pip install redis
 RUN 	pip install requests
