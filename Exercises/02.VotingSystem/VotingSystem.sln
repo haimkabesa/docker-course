@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Web", "Voting.Web\Voting.Web.csproj", "{9E04DA88-315B-4B67-8A89-265CBDB05C8D}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{08177D3A-A51E-42D5-B48D-BC4A8E826CC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.API", "Voting.API\Voting.API.csproj", "{04D2DBD1-33EA-45CB-9034-3E8B016C2825}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Voting.Processor", "Voting.Processor\Voting.Processor.csproj", "{E55478A6-A2AD-4FEA-AE31-A21A701DE0CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Webpy", "Webpy", "{12AA3BDC-54F1-44B2-AB06-B04E61A03C12}"
+	ProjectSection(SolutionItems) = preProject
+		Voting.Webpy\config_file.cfg = Voting.Webpy\config_file.cfg
+		Voting.Webpy\main.py = Voting.Webpy\main.py
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{7A7BED43-B174-478D-9573-BF0353CD0E75}"
+	ProjectSection(SolutionItems) = preProject
+		k8s\rabbitmq-deployment.yaml = k8s\rabbitmq-deployment.yaml
+		k8s\rabbitmq-service.yaml = k8s\rabbitmq-service.yaml
+		k8s\voting.api-deployment.yaml = k8s\voting.api-deployment.yaml
+		k8s\voting.api-service.yaml = k8s\voting.api-service.yaml
+		k8s\voting.db-deployment.yaml = k8s\voting.db-deployment.yaml
+		k8s\voting.db-service.yaml = k8s\voting.db-service.yaml
+		k8s\voting.processor-deployment.yaml = k8s\voting.processor-deployment.yaml
+		k8s\voting.processor-service.yaml = k8s\voting.processor-service.yaml
+		k8s\voting.web-deployment.yaml = k8s\voting.web-deployment.yaml
+		k8s\voting.web-service.yaml = k8s\voting.web-service.yaml
+		k8s\voting.webpy-deployment.yaml = k8s\voting.webpy-deployment.yaml
+		k8s\voting.webpy-service.yaml = k8s\voting.webpy-service.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9E04DA88-315B-4B67-8A89-265CBDB05C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E04DA88-315B-4B67-8A89-265CBDB05C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E04DA88-315B-4B67-8A89-265CBDB05C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E04DA88-315B-4B67-8A89-265CBDB05C8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08177D3A-A51E-42D5-B48D-BC4A8E826CC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08177D3A-A51E-42D5-B48D-BC4A8E826CC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08177D3A-A51E-42D5-B48D-BC4A8E826CC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08177D3A-A51E-42D5-B48D-BC4A8E826CC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04D2DBD1-33EA-45CB-9034-3E8B016C2825}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04D2DBD1-33EA-45CB-9034-3E8B016C2825}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04D2DBD1-33EA-45CB-9034-3E8B016C2825}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04D2DBD1-33EA-45CB-9034-3E8B016C2825}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E55478A6-A2AD-4FEA-AE31-A21A701DE0CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E55478A6-A2AD-4FEA-AE31-A21A701DE0CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E55478A6-A2AD-4FEA-AE31-A21A701DE0CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E55478A6-A2AD-4FEA-AE31-A21A701DE0CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56D619BA-99F4-49C8-8074-8B503E13BB26}
+	EndGlobalSection
+EndGlobal
