@@ -17,9 +17,6 @@ services:
     build:
       context: .
       dockerfile: Voting.Processor/Dockerfile
-    depends_on: 
-     - voting.db
-     - rabbitmq
     environment:
       REDIS: votingdb
       RABBITMQ: rabbitmq
@@ -36,19 +33,3 @@ services:
       API_ADDRESS: "voting.api"
     ports:
         - "8080:5000"
-
-  voting.db:
-    image: redis
-    container_name: votingdb
-    ports:
-        - "6379:6379"
-
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    environment:
-      RABBITMQ_DEFAULT_USER: "user"
-      RABBITMQ_DEFAULT_PASS: "password"
-      RABBITMQ_DEFAULT_VHOST: "/"
-    ports:
-      - "15672:15672"
-      - "5672:5672"

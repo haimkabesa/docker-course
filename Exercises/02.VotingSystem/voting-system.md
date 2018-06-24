@@ -28,4 +28,5 @@ Joe's ToDo List:
 
 1. There is a known issue with the x service... before it starts rabbitmq must be up and ready. This constraint is due to the fact that the x service is trying to establish a connection with the rabbitmq service at start time. Unfortunately, no fault tolerance mechanism where implemented yet to handle the exception that is thrown.
 
+
 Goodluck!
