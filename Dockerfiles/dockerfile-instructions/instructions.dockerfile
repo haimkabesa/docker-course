@@ -94,3 +94,21 @@ CMD apache2ctl -D FOREGROUND
 
 # Shell form
 ENTRYPOINT dotnet run --server.urls http://0.0.0.0:5000
+
+
+# ONBUILD
+# -------------
+
+# Base image
+FROM maven:3-jdk-8
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+ONBUILD ADD . /usr/src/app
+ONBUILD RUN mvn install
+
+# Derived image 
+FROM maven:3.3-jdk-8-onbuild
+CMD ["java","-jar","/usr/src/app/target/demo-1.0-SNAPSHOT-jar-with-dependencies.jar"]
+
